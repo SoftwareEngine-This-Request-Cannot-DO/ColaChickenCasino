@@ -1,0 +1,71 @@
+{% extends 'baseof.html' %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+{% endblock %}
+
+{% block content %}
+<div class="layout">
+    <div class="nav-wrapper">
+        <div class="left-dialog" style="margin-top: 80px;">
+            <div class="profile-box">
+                <i class="fi fi-sr-bird icon"></i>
+                <div class="details">
+                    <ul>
+                        <li>{{ user.id }}</li>
+                        <li>你的代幣：0</li>
+                        <li>你的籌碼：0</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="left-dialog">
+            <ul class="button-groups">
+                <li><button>儲值現金</button></li>
+                <li><button>換取籌碼</button></li>
+            </ul>
+        </div>
+        <div class="left-dialog">
+            <div class="side-menu">
+                <div class="game">
+                    <ul>
+                        <li>
+                            <span>
+                                <i class="fi fi-sr-cherry"></i>
+                                <a href="/game">吃角子老虎機</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="left-dialog">
+            <div class="chatroom">
+                <ul>
+                    <li>
+                        <span>
+                            <i class="fi fi-ss-comment"></i>
+                            <a href="/chat">聊天室</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul class="button-groups">
+            <li>
+                <form action="/logout">
+                    <button class="alert">登出</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div class="main-wrapper">
+        {% block main %}
+        <main>This is Home Page</main>
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

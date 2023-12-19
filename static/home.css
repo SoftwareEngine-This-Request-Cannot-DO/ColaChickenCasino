@@ -1,0 +1,151 @@
+.layout{
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+.nav-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    height: 100%;
+    background-color: #1C0F13;
+    box-shadow: 1rem 0 5rem #121212;
+    z-index: 1;
+}
+
+.left-dialog{
+    margin: 5px 20px;
+    padding: 5px;
+    width: 80%;
+    height: auto;
+    background: #3A0F47;
+    border-radius: 10px;
+}
+
+.profile-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+.profile-box::before{
+    content: "";
+    width: 70px;
+    height: 70px;
+    background-color: #1C0F13;
+    position: absolute;
+    top: -40px;
+    border-bottom-left-radius: 5rem;
+    border-bottom-right-radius: 5rem;
+}
+.icon{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: -50px;
+    font-size: 3.5rem;
+    color: #8A64E3;
+    cursor: pointer;
+    border: 2px solid #8A64E3;
+    border-radius: 5rem;
+}
+i.fi.fi-sr-bird.icon::before{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.icon:hover{
+    color: #C2AFF0;
+    border: 2px solid #C2AFF0;
+}
+
+.details{
+    width: 100%;
+    margin-top: 40px;
+}
+
+ul{
+    position: relative;
+    width: 100%;
+    list-style: none;
+}
+
+li{
+    border-bottom: 2px solid #1C0F13;
+    color: #C2AFF0;
+    font-size: medium;
+    text-align: center;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+ul li span{
+    margin-left: 20px;
+    display: flex;
+    align-items:  baseline;
+}
+
+ul.button-groups>li{
+    border: none;
+}
+
+ul li button{
+    cursor: pointer;
+    min-width: 6rem;
+    width: auto;
+    user-select: none;
+    border-radius: 100px;
+    margin: 0 auto;
+    background: none;
+    outline: none;
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 0 1em;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid #FF6B35;
+    line-height: 2;
+    color: #FF6B35;
+    background-color: #212121;
+}
+
+ul li button.alert{
+    color: #640211;
+    border: 2px solid #640211;
+    transition: 1s ease-in-out;
+}
+ul li button.alert:hover{
+    color: #FC5F77;
+    border: 2px solid #FC5F77;
+}
+
+li:last-child{
+    border-bottom: none;
+}
+
+a{
+    margin-left: 10px;
+    text-align: left;
+    color:#C2AFF0;
+    text-decoration: none;
+    font-weight: 900;
+}
+a:hover{
+    color: aliceblue;
+    transition: .5s;
+}
+
+.main-wrapper{
+    height: 100%;
+    flex: 1 1 auto;
+    background-color: #2c181e;
+}
