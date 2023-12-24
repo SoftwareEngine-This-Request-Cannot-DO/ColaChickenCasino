@@ -1,4 +1,39 @@
 {% extends 'home.html' %}
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="../static/css/slot.css">
+{% endblock %}
 {% block main %}
-<main>This is Game Page</main>
+<div class="header">
+	<h2>
+		<marquee direction="right" scrollamount="5" behavior="alternate">可樂炸雞娛樂城</marquee>
+	</h2>
+</div>
+<div id="debug" class="debug"></div> 
+<body>
+	<span>
+		<div class="container-grid">			
+			<img class="left img" src="../static/img/giphy.gif" alt="machine gif" >			
+			<div class="middle">
+				<div class="slots">
+					<div class="reel"></div>
+					<div class="reel"></div>
+					<div class="reel"></div>
+				</div>
+			</div>
+			<div class="footer">
+					<label for="bet-input text">下注金額：</label>
+					<input type="number" id="bet-input" min="1" value="0">
+					<button id="bet-button" >下注</button>
+					<p>您的點數：<span id="credits-display"> --</span></p>
+					<p>您的賭注：<span id="is_balance"> --</span></p>  
+					<p>獲得獎金：<span id="jackpot"> --</span></p>
+				</div>
+				<script src="../static/js/machine.js"></script>
+				
+		</div>
+	</span>
+
+	<script src="../static/js/reel.js"></script> 
+</body>
 {% endblock %}
