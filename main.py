@@ -1,12 +1,15 @@
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask import Flask, flash, redirect, render_template, request, url_for
+from flask_socketio import SocketIO
 from flask_cors import CORS
 import json
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(16).hex())
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -28,6 +31,7 @@ def user_loader(userid):
     user = User()
     user.id = users[userid]['username']
     return user
+
 
 @app.route('/')
 def index():
@@ -66,9 +70,16 @@ def game():
     return render_template('game.html', user=current_user)
 
 @app.route('/chat')
+
 @login_required
 def chat():
     return render_template('chat.html', user=current_user)
 
+@socketio.on('send_message')
+def handle_message(data):
+    print('Received message: ' + data['message'])  # print接收到的消息
+    socketio.emit('receive_message', data)  # 廣播消息
+    print('Message sent back to client')  # 確認訊息發送
+
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=5000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
