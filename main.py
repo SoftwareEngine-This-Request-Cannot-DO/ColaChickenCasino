@@ -30,6 +30,10 @@ def user_loader(userid):
 
     user = User()
     user.id = users[userid]['username']
+    user.info = {}
+    for key, value in users[userid].items():
+        if key != "username" and key != "password":
+            user.info[key] = value
     return user
 
 
@@ -70,7 +74,6 @@ def game():
     return render_template('game.html', user=current_user)
 
 @app.route('/chat')
-
 @login_required
 def chat():
     return render_template('chat.html', user=current_user)
@@ -80,6 +83,14 @@ def handle_message(data):
     print('Received message: ' + data['message'])  # print接收到的消息
     socketio.emit('receive_message', data)  # 廣播消息
     print('Message sent back to client')  # 確認訊息發送
+
+@app.route('/depositMoreCoins')
+def depositMoreCoins():
+    return render_template('coins.html', user=current_user)
+
+@app.route('/changeMoreChips')
+def changeMoreChips():
+    return render_template('chips.html', user=current_user)
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)

@@ -16,16 +16,20 @@
                 <div class="details">
                     <ul>
                         <li>{{ user.id }}</li>
-                        <li>你的代幣：0</li>
-                        <li>你的籌碼：0</li>
+                        <li>你的代幣：{{ user.info.coin }}</li>
+                        <li>你的籌碼：{{ user.info.chips }}</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="left-dialog">
             <ul class="button-groups">
-                <li><button>儲值現金</button></li>
-                <li><button>換取籌碼</button></li>
+                <form action="/depositMoreCoins">
+                    <li><button>儲值代幣</button></li>
+                </form>
+                <form action="/changeMoreChips">
+                    <li><button>換取籌碼</button></li>
+                </form>
             </ul>
         </div>
         <div class="left-dialog">

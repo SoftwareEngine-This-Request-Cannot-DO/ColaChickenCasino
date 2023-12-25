@@ -1,34 +1,28 @@
 {% extends 'home.html' %}
-{% block main %}
-<main>This is Chat Page</main>
+{% block css %}
+{{ super() }}
+<title>聊天室</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}"/>
 {% endblock %}
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <title>聊天室</title>
-    <!-- 其他樣式保持不變 -->
-</head>
-<body>
-    <div id="chat-container"></div>
-    <input type="text" id="message-input" placeholder="輸入訊息...">
-    <button id="send-button">發送</button>
-    <!-- 引入 Socket.IO -->
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+{% block main %}
+<div id="chat-container"></div>
+<input type="text" id="message-input" placeholder="輸入訊息...">
+<button id="send-button">發送</button>
+{% endblock %}
 
-</body>
-</html>
-
+{% block js %}
+<!-- 引入 Socket.IO -->
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
 <script>
-    var socket = io('http://localhost:5000');
+    const socket = io('http://localhost:5000');
 
     socket.on('connect', function() {
         console.log('Connected to the server');
     });
 
     document.getElementById('send-button').addEventListener('click', function() {
-        var message = document.getElementById('message-input').value;
+        const message = document.getElementById('message-input').value;
         if (message) {
             socket.emit('send_message', { message: message });
             document.getElementById('message-input').value = '';
@@ -43,3 +37,4 @@
     });
 
 </script>
+{% endblock %}

@@ -1,6 +1,14 @@
 {
     "Test": {
             "username": "ColaChicken",
-            "password": "test"
+            "password": "test",
+            "Amount": 148000,
+            "coin": 100,
+            "chips": 100
+        },
+    "Player001": {
+            "username": "Player001",
+            "password": "123456789",
+            "Amount": 148000
         }
 }
