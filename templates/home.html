@@ -2,6 +2,7 @@
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}"/>
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -66,10 +67,21 @@
             </li>
         </ul>
     </div>
+    {% include 'chatroom.html' %}
     <div class="main-wrapper">
         {% block main %}
         <main>This is Home Page</main>
         {% endblock %}
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    const chattingRoom = document.getElementById("chatting-room");
+    document.getElementById("chatting-screen").addEventListener('click', () => {
+        chattingRoom.classList.toggle('slide-out');
+        chattingRoom.classList.toggle('slide-in');
+    });
+</script>
 {% endblock %}

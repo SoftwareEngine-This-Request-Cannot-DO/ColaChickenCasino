@@ -1,0 +1,23 @@
+<div id="chatting-room" class="slide-out">
+    <div class="friends"></div>
+    <div class="chat">
+        <div class="chat-title">
+            <h1>Fabio Ottaviani</h1>
+            <h2>Supah</h2>
+            <figure class="avatar"><img src="../static/img/soda-can.png"/></figure>
+        </div>
+        <div class="messages">
+            <div class="messages-content" id="chat-container"></div>
+        </div>
+        <div class="message-box">
+            <textarea type="text" id="message-input" class="message-input" placeholder="Type message..."></textarea>
+            <button type="submit" id="send-button" class="message-submit">Send</button>
+        </div>
+
+    </div>
+    <button id="chatting-screen">></button>
+</div>
+
+<!-- 引入 Socket.IO -->
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>

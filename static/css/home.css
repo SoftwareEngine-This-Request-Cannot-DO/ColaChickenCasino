@@ -1,4 +1,5 @@
 .layout{
+    position: relative;
     display: flex;
     flex: 1;
     height: 100%;
@@ -11,7 +12,7 @@
     height: 100%;
     background-color: #1C0F13;
     box-shadow: 1rem 0 5rem #121212;
-    z-index: 1;
+    z-index: 10;
 }
 
 .left-dialog{

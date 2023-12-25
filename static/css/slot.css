@@ -1,11 +1,11 @@
 .container-grid{
   display: grid;
   grid-template-areas:
-      'header header header header header'
-      'left middle middle middle right'
-      'footer footer footer footer footer';
+      'header header header header'
+      'left middle middle right'
+      'footer footer footer footer';
 
-  grid-template-columns: 1fr 3fr 1fr; /* 列的比例设置，left和right各占1个单位，middle占3个单位 */
+  grid-template-columns: 1fr 2fr 1fr; /* 列的比例设置，left和right各占1个单位，middle占3个单位 */
       grid-column-gap:5px;
       grid-row-gap:5px;
   }
