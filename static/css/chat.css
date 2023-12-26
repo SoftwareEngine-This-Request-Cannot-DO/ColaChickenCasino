@@ -2,11 +2,13 @@
 Chat
 --------------------*/
 .slide-in {
+  pointer-events: all;
   transform: translateX(0) !important;
 }
 
 .slide-out {
-  transform: translateX(-33rem);
+  pointer-events: none;
+  transform: translateX(-32rem);
 }
 
 #chatting-room {
@@ -342,6 +344,7 @@ Bounce
   }
 }
 #chatting-screen {
+  pointer-events: all;
   position: absolute;
   top: 50%;
   left: 50%;

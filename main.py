@@ -1,5 +1,5 @@
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
 import json
@@ -20,7 +20,7 @@ login_manager.login_message = '這裡是充滿希望的地方，請表明你的�
 class User(UserMixin):
     pass
 
-with open('user.json', 'r', encoding='utf-8') as f:
+with open('static/json/user.json', 'r', encoding='utf-8') as f:
     users = json.load(f)
 
 @login_manager.user_loader
@@ -30,6 +30,7 @@ def user_loader(userid):
 
     user = User()
     user.id = users[userid]['username']
+    user.account = userid
     user.info = {}
     for key, value in users[userid].items():
         if key != "username" and key != "password":
@@ -71,7 +72,24 @@ def home():
 @app.route('/game')
 @login_required
 def game():
+    print(current_user.info['chips'])
     return render_template('game.html', user=current_user)
+
+@app.route('/slotrun', methods=['POST'])
+def slotrun():
+    try:
+        data = request.get_json()
+        print(data)
+        chips_result = int(data['current']) - int(data['pay'])
+        if data['result'] != '--':
+            chips_result += int(data['result'])
+        users[current_user.account]['chips'] = chips_result
+        with open('static/json/user.json', 'w', encoding='utf-8') as f:
+            json.dump(users, f, indent=2, ensure_ascii=False)
+        return jsonify({'chips': chips_result})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 @app.route('/chat')
 @login_required
@@ -86,7 +104,11 @@ def handle_message(data):
 
 @app.route('/depositMoreCoins')
 def depositMoreCoins():
-    return render_template('coins.html', user=current_user)
+    return render_template('coins.html', user=current_user, type="")
+
+@app.route('/depositWith/<type>', methods=['POST'])
+def creditCards(type):
+    return render_template('coins.html', user=current_user, type=type)
 
 @app.route('/changeMoreChips')
 def changeMoreChips():

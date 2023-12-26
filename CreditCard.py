@@ -5,7 +5,7 @@ exchange_rate = 100
 
 def read_json_file(filename):
     try:
-        with open(filename, "r") as f:
+        with open(filename, "r", encoding='utf-8') as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -13,8 +13,8 @@ def read_json_file(filename):
 
 def write_json_file(filename, new_data):
     try:
-        with open(filename, 'w') as f:
-            json.dump(new_data, f, indent=2)
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(new_data, f, indent=2, ensure_ascii=False)
     except FileExistsError:
         return FileExistsError
 

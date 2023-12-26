@@ -22,15 +22,14 @@
 				</div>
 			</div>
 			<div class="footer">
-					<label for="bet-input text">下注金額：</label>
+					<label for="bet-input text">下注籌碼：</label>
 					<input type="number" id="bet-input" min="1" value="0">
-					<button id="bet-button" >下注</button>
-					<p>您的點數：<span id="credits-display"> --</span></p>
-					<p>您的賭注：<span id="is_balance"> --</span></p>  
-					<p>獲得獎金：<span id="jackpot"> --</span></p>
+					<button id="bet-button">下注</button>
+					<p>您的籌碼：<span id="credits-display">{{user.info.chips}}</span></p>
+					<p>您的賭注：<span id="is_balance">--</span></p>  
+					<p>獲得籌碼：<span id="jackpot">--</span></p>
 				</div>
 				<script src="../static/js/machine.js"></script>
-				
 		</div>
 	</span>
 

@@ -103,28 +103,21 @@ const roll = (reel, offset = 0) => {
 
 
 let winCls = "";
-function rollAll() {
+async function rollAll() {
   debugEl.textContent = 'rolling...';
   const reelsList = document.querySelectorAll('.slots > .reel');
-  Promise
-  .all([...reelsList].map((reel, i) => roll(reel, i)))
-
-  .then(deltas => {
-    deltas.forEach((delta, i) => indexes[i] = (indexes[i] + delta) % num_icons);
-    debugEl.textContent = indexes.map(i => iconMap[i]).join(' - ');
-    if (indexes[0] == indexes[1] && indexes[1] == indexes[2]) {
-      winCls = "win2" ;
-      document.querySelector(".slots").classList.add(winCls);
-      setTimeout(() => document.querySelector(".slots").classList.remove(winCls), 2000);
-    }
-  });
-}
-;
-setTimeout(rollAll, 500);
-
-
-
-
-
-
-
+  return new Promise( resolve => {
+    Promise
+      .all([...reelsList].map((reel, i) => roll(reel, i)))
+      .then(deltas => {
+        deltas.forEach((delta, i) => indexes[i] = (indexes[i] + delta) % num_icons);
+        debugEl.textContent = indexes.map(i => iconMap[i]).join(' - ');
+        if (indexes[0] == indexes[1] && indexes[1] == indexes[2]) {
+          winCls = "win2" ;
+          document.querySelector(".slots").classList.add(winCls);
+          setTimeout(() => document.querySelector(".slots").classList.remove(winCls), 2000);
+        }
+        resolve();
+      })
+  })
+};

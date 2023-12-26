@@ -1,4 +1,30 @@
 {% extends 'home.html' %}
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coins.css')}}">
+{% endblock %}
+
 {% block main %}
-<main>儲值現金</main>
+<main>
+    <div class="type-container">
+        <h1>選擇儲值方式</h1>
+        <div class="box">
+            <form action="/depositWith/creditCard", method="post">
+                <button class="button-37" role="button">信用卡儲值</button>
+            </form>
+        </div>
+        <div class="box">
+            <form action="/depositWith/LinePay", method="post">
+                <button class="button-37" role="button">Line Pay 儲值</button>
+            </form>
+        </div>
+    </div>
+    <div class="operation-container">
+        {% if type == "creditCard" %}
+            {% include 'creditCard.html' %}
+        {% elif type == "LinePay" %}
+            {% include 'linePay.html' %}
+        {% endif %}
+    </div>
+</main>
 {% endblock %}
