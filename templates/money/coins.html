@@ -8,22 +8,49 @@
 <main>
     <div class="type-container">
         <h1>選擇儲值方式</h1>
-        <div class="box">
-            <form action="/depositWith/creditCard", method="post">
-                <button class="button-37" role="button">信用卡儲值</button>
-            </form>
-        </div>
-        <div class="box">
-            <form action="/depositWith/LinePay", method="post">
-                <button class="button-37" role="button">Line Pay 儲值</button>
-            </form>
+        <div class="type-wrapper">
+            <div class="box">
+                <form action="/depositWith/creditCard", method="post">
+                    <button class="button-6" role="button">信用卡儲值</button>
+                </form>
+            </div>
+            <div class="box">
+                <form action="/depositWith/LinePay", method="post">
+                    <button class="button-6" role="button">Line Pay 儲值</button>
+                </form>
+            </div>
         </div>
     </div>
     <div class="operation-container">
         {% if type == "creditCard" %}
-            {% include 'creditCard.html' %}
+            <div class="credit-content">
+                <div class="pay-details">
+                    <label for="">信用卡卡號:</label>
+                    <input type="text" name="credit-number1" id="credit-number1">-
+                    <input type="text" name="credit-number2" id="credit-number2">-
+                    <input type="text" name="credit-number3" id="credit-number3">-
+                    <input type="text" name="credit-number4" id="credit-number4">
+                </div>
+                <div class="pay-details">
+                    <label for="">有效期限:</label>
+                    <input type="text" name="credit-dated" id="credit-dated" placeholder="MM/YY"></input>
+                </div>
+                <div class="pay-details">
+                    <label for="">CVC/CVV 代碼:</label>
+                    <input type="text" name="credit-secret" id="credit-secret" placeholder="背面末三碼">
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="pay-details">
+                    <label for="">儲值金額:</label>
+                    <input type="text" name="deposit-money" id="deposit-money" placeholder="儲值金額">
+                </div>
+                <button class="button-64" role="button"><span class="text">確認儲值</span></button>
+            </div>
         {% elif type == "LinePay" %}
-            {% include 'linePay.html' %}
+            {% include 'money/linePay.html' %}
+        {% else %}
+            <h2>請從上面選擇一種儲值方式</h2>
         {% endif %}
     </div>
 </main>
