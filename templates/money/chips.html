@@ -1,13 +1,74 @@
-{% extends 'home.html' %}
-{% block css %}
-{{ super() }}
-<link rel="stylesheet" href="{{url_for('static', filename='css/chips.css')}}">
-{% endblock %}
-
-{% block main %}
-<main>
-    <div class="type-container">
-        <h1>換取籌碼</h1>
+<div class="chipsPopup" data-role="popup">
+    <h1>兌換籌碼</h1>
+    <div class="chips-container">
+        <i class="fi fi-br-cross-circle cancel-icon"></i>
+        <div class="chips-details">
+            <label for="">兌換的籌碼：</label>
+            <input type="text" name="chips-change" id="chips-change">
+        </div>
+        <div id="exchange-info"></div>
     </div>
-</main>
-{% endblock %}
+    <div class="bottom">
+        <button class="button-64" role="button" id="changeButton"><span class="text">兌換籌碼</span></button>
+    </div>
+</div>
+
+<script>
+document.getElementById("changeMoreChips").addEventListener("click", () => {
+    document.querySelector("div[data-role='popup']").classList.toggle('fadein');
+    document.querySelector(".layout").classList.toggle('blur-filter');
+});
+
+document.querySelector(".cancel-icon").addEventListener("click", () => {
+    document.querySelector("div[data-role='popup']").classList.toggle('fadein');
+    document.querySelector(".layout").classList.toggle('blur-filter');
+});
+
+document.getElementById('changeButton').addEventListener('click', () => handleData())
+
+const chipsInput = document.getElementById("chips-change")
+const coinsInput = document.getElementById("myCoins").querySelector(".number")
+const currentChips = document.getElementById("myCoins").querySelector(".number")
+const exchangeInfo = document.getElementById("exchange-info")
+chipsInput.addEventListener("input", () => {
+    const chipsAmount = parseInt(chipsInput.value);
+    if (!isNaN(chipsAmount) && chipsAmount >= 0) {
+        exchangeInfo.textContent = `需要 ${chipsAmount * 5} 代幣兌換`;
+    } else {
+        exchangeInfo.textContent = '';
+    }
+})
+
+const handleData = () => {
+    const chipsAmount = parseInt(chipsInput.value);
+    const coinsAmount = parseInt(coinsInput.innerHTML);
+    const currentChipsAmount = parseInt(currentChips.innerHTML);
+    if (isNaN(chipsAmount) || isNaN(currentChipsAmount) || chipsAmount > coinsAmount) return;
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "coins": coinsAmount,
+            "input_chips": chipsAmount,
+            "current_chips": currentChipsAmount,
+        })
+    }
+    fetch('http://127.0.0.1:5000/changeMoreChips', requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            document.getElementById('myCoins').querySelector(".number").innerText = data.coins;
+            document.getElementById('myChips').querySelector(".number").innerText = data.chips;
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+</script>

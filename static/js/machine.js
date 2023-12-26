@@ -53,7 +53,7 @@ const handleData = () => {
         })
         .then(data => {
             console.log('Response data:', data);
-            document.getElementById('myChips').innerText = "你的籌碼：" + data.chips;
+            document.getElementById('myChips').querySelector(".number").innerText = data.chips;
             document.getElementById("credits-display").textContent = data.chips;
         })
         .catch(error => {

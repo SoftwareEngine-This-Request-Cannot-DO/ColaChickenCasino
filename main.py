@@ -102,16 +102,33 @@ def handle_message(data):
     print('Message sent back to client')  # 確認訊息發送
 
 @app.route('/depositMoreCoins')
+@login_required
 def depositMoreCoins():
     return render_template('money/coins.html', user=current_user, type="")
 
 @app.route('/depositWith/<type>', methods=['POST'])
+@login_required
 def creditCards(type):
     return render_template('money/coins.html', user=current_user, type=type)
 
-@app.route('/changeMoreChips')
+@app.route('/changeMoreChips',  methods=['POST'])
+@login_required
 def changeMoreChips():
-    return render_template('money/chips.html', user=current_user)
+    try:
+        data = request.get_json()
+        coins_result = int(data['coins']) - int(data['input_chips']) * 5
+        chips_result = int(data['current_chips']) + int(data['input_chips'])
+        users[current_user.account]['coin'] = coins_result
+        users[current_user.account]['chips'] = chips_result
+        with open('static/json/user.json', 'w', encoding='utf-8') as f:
+            json.dump(users, f, indent=2, ensure_ascii=False)
+        return jsonify({
+                'coins': coins_result,
+                'chips': chips_result
+            })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
