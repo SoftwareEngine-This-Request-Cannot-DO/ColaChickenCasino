@@ -13,11 +13,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             alert("下注過少");
         }
         else {
+            document.getElementById("is_balance").textContent = betAmount; 
             document.getElementById("jackpot").textContent = "--"             
-            await rollAll();
-            credits -= betAmount;
-            document.getElementById("credits-display").textContent = credits ;
-            document.getElementById("is_balance").textContent = betAmount;           
+            await rollAll(); // 等待 rollAll 跑完
+            credits -= betAmount;          
             if(winNumber != -1){
                 credits += betAmount * magnificat[winNumber]
                 document.getElementById("jackpot").textContent = betAmount * magnificat[winNumber] //倍率看圖案
@@ -28,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 });
 
+// 傳送資料至 flask 後端進行資料更新
 const handleData = () => {
     const credits = document.getElementById('credits-display').innerHTML;
     const pay = document.getElementById('bet-input').value;

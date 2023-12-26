@@ -69,11 +69,10 @@ def logout():
 def home():
     return render_template('home.html', user=current_user)
 
-@app.route('/game')
+@app.route('/game/<gameType>')
 @login_required
-def game():
-    print(current_user.info['chips'])
-    return render_template('game.html', user=current_user)
+def game(gameType):
+    return render_template(f'/games/{gameType}.html', user=current_user)
 
 @app.route('/slotrun', methods=['POST'])
 def slotrun():
@@ -94,7 +93,7 @@ def slotrun():
 @app.route('/chat')
 @login_required
 def chat():
-    return render_template('chat.html', user=current_user)
+    return render_template('chat/chat.html', user=current_user)
 
 @socketio.on('send_message')
 def handle_message(data):
@@ -104,15 +103,15 @@ def handle_message(data):
 
 @app.route('/depositMoreCoins')
 def depositMoreCoins():
-    return render_template('coins.html', user=current_user, type="")
+    return render_template('money/coins.html', user=current_user, type="")
 
 @app.route('/depositWith/<type>', methods=['POST'])
 def creditCards(type):
-    return render_template('coins.html', user=current_user, type=type)
+    return render_template('money/coins.html', user=current_user, type=type)
 
 @app.route('/changeMoreChips')
 def changeMoreChips():
-    return render_template('chips.html', user=current_user)
+    return render_template('money/chips.html', user=current_user)
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)

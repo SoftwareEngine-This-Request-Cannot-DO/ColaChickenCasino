@@ -4,7 +4,7 @@
     "password": "test",
     "Amount": 148000,
     "coin": 100,
-    "chips": 10000
+    "chips": 0
   },
   "Player001": {
     "username": "Player001",
