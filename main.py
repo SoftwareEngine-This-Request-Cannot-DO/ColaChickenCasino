@@ -97,9 +97,10 @@ def chat():
 
 @socketio.on('send_message')
 def handle_message(data):
-    print('Received message: ' + data['message'])  # print接收到的消息
-    socketio.emit('receive_message', data)  # 廣播消息
-    print('Message sent back to client')  # 確認訊息發送
+    print('Received message: ' + data['message'])
+    username = current_user.id  # 獲取當前用戶的用戶名
+    message_data = {'message': data['message'], 'username': username}
+    socketio.emit('receive_message', message_data)  # 廣播消息包含用戶名
 
 @app.route('/depositMoreCoins')
 @login_required
