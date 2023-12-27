@@ -2,13 +2,21 @@
   "Test": {
     "username": "ColaChicken",
     "password": "test",
-    "Amount": 148000,
-    "coin": 75,
-    "chips": 0
+    "coin": 148000,
+    "chips": 0,
+    "play_times": {
+        "blackjack": 0,
+        "reel": 0
+    }
   },
   "Player001": {
     "username": "Player001",
     "password": "123456789",
-    "Amount": 148000
+    "coin": 148000,
+    "chips": 0,
+    "play_times": {
+        "blackjack": 0,
+        "reel": 0
+    }
   }
 }
