@@ -2,6 +2,7 @@
 import copy
 import random
 import pygame
+import json
 
 pygame.init()
 # game variables
@@ -30,13 +31,20 @@ hand_active = False
 outcome = 0
 add_score = False
 results = ['', 'PLAYER BUSTED o_O', 'Player WINS! :)', 'DEALER WINS :(', 'TIE GAME...']
-
+username = ""
 
 # deal cards by selecting randomly from deck, and make function for one card at a time
 def deal_cards(current_hand, current_deck):
     card = random.randint(0, len(current_deck))
     current_hand.append(current_deck[card - 1])
     current_deck.pop(card - 1)
+    if is_first_time(username) and current_hand == dealer_hand:
+        while calculate_score(current_hand) >= calculate_score(my_hand):
+            current_hand.pop()
+            card = random.randint(0, len(current_deck))
+            current_hand.append(current_deck[card - 1])
+            current_deck.pop(card - 1)
+
     return current_hand, current_deck
 
 
@@ -151,6 +159,26 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
     return result, totals, add
 
 
+def settle(outcome):
+    chip = 2000
+
+    with open("user.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
+    if outcome == 2:
+        data[username]["chips"] += chip
+    elif outcome == 1 and outcome == 3:
+        data[username]["chips"] -= chip
+    with open("user.json", 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+def is_first_time(username):
+    with open("user.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
+    if data[username]["gameT"]["blackjack"] == 0:
+        return True
+    else:
+        return False
+
 # main game loop
 run = True
 while run:
@@ -221,6 +249,6 @@ while run:
         reveal_dealer = True
 
     outcome, records, add_score = check_endgame(hand_active, dealer_score, player_score, outcome, records, add_score)
-
+    settle(outcome)
     pygame.display.flip()
 pygame.quit()
