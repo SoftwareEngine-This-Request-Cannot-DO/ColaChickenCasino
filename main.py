@@ -1,4 +1,3 @@
-import subprocess
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask import Flask, flash, redirect, render_template, request, url_for, jsonify
 from flask_socketio import SocketIO
@@ -81,6 +80,7 @@ def chat():
 @socketio.on('send_message')
 def handle_message(data):
     print('Received message: ' + data['message'])
+    print(data)
     username = data['user']  # 獲取當前用戶的用戶名
     message_data = {'message': data['message'], 'username': username}
     socketio.emit('receive_message', message_data)  # 廣播消息包含用戶名
@@ -88,14 +88,14 @@ def handle_message(data):
 @socketio.on('change_status')
 def handle_status_change(data):
     status = data['status']
-    print(f"Changing status for {current_user.username} to {status}")  
-    user_statuses[current_user.username] = status  # 更新狀態
+    print(f"Changing status for {data['user']} to {status}")  
+    user_statuses[data['user']] = status  # 更新狀態
 
     # 廣播用戶狀態更改
-    socketio.emit('status_updated', {'user': current_user.username, 'status': status})
+    socketio.emit('status_updated', {'user': data['user'], 'status': status})
 
     # 廣播用戶上線或下線的消息
-    status_message = f"{current_user.username} {'上線' if status == 'online' else '下線'}"
+    status_message = f"{data['user']} {'上線' if status == 'online' else '下線'}"
     socketio.emit('receive_message', {'message': status_message, 'username': '系統'})
 
 #/chat

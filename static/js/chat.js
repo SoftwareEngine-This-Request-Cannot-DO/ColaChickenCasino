@@ -6,13 +6,17 @@ socket.on('connect', function() {
 
 document.getElementById('send-button').addEventListener('click', function() {
     const message = document.getElementById('message-input').value;
+    const user = document.getElementById('myName').innerHTML;
     if (message) {
-        socket.emit('send_message', { message: message });
+        socket.emit('send_message', {
+            message: message,
+            user: user
+        });
         document.getElementById('message-input').value = '';
     }
 });
 
-//Enter發送
+//Enter 發送
 document.getElementById('message-input').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // 阻止 Enter 鍵的默認行為
@@ -63,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         indicator.addEventListener('click', function() {
             if (!canChangeStatus) {
                 console.log("You can only change status every 3 seconds.");
-                return; // 如果還沒到3秒，則不執行任何操作
+                return; // 如果還沒到 3 秒，則不執行任何操作
             }
 
             canChangeStatus = false; // 設置狀態切換標誌為 false
@@ -72,25 +76,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 3000); // 3秒的計時器
 
             const isOnline = this.classList.contains('online');
+            const user = document.getElementById('myName').innerHTML;
             const newStatus = isOnline ? 'offline' : 'online';
             this.classList.toggle('online', newStatus === 'online');
             this.classList.toggle('offline', newStatus === 'offline');
 
-            socket.emit('change_status', { status: newStatus });
+            socket.emit('change_status', { status: newStatus, user: user });
+            console.log("OK")
         });
     });
 });
 function setupStatusIndicatorListeners() {
     document.querySelectorAll('.status-indicator').forEach(indicator => {
         indicator.addEventListener('click', function() {
+            const user = document.getElementById('myName').innerHTML;
             const isOnline = this.classList.contains('online');
             const newStatus = isOnline ? 'offline' : 'online';
-            socket.emit('change_status', { status: newStatus });
+            socket.emit('change_status', { status: newStatus, user: user });
         });
     });
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    setupStatusIndicatorListeners();
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     setupStatusIndicatorListeners();
+// });
