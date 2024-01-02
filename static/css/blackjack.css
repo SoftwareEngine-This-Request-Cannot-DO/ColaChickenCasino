@@ -1,0 +1,42 @@
+.blackjack-bg{
+    width: 100%;
+    height: 100%;
+    color:darkgrey;
+    display: flex;
+    padding: 50px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+#blackjack-title{
+    font-size: 5rem;
+    margin: 50px;
+}
+
+.blackjack-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.input-container{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 10px 0;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+input{
+  width: 120px;
+  height: 40px;
+  margin: 0 10px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.input-container label{
+    margin: 20px 0;
+}

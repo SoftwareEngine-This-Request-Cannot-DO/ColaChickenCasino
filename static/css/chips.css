@@ -107,3 +107,7 @@ main{
   width: 200px;
   text-align: right;
 }
+
+#exchange-info{
+  color:red;
+}

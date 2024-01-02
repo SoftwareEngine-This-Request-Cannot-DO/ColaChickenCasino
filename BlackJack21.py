@@ -3,8 +3,15 @@ import copy
 import random
 import pygame
 import json
+import argparse
 
 pygame.init()
+parser = argparse.ArgumentParser(description='Description of your script.')
+parser.add_argument('--username', help='Description for option1')
+args = parser.parse_args()
+if args.username:
+    username = args.username
+
 # game variables
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 one_deck = 4 * cards
@@ -31,7 +38,6 @@ hand_active = False
 outcome = 0
 add_score = False
 results = ['', 'PLAYER BUSTED o_O', 'Player WINS! :)', 'DEALER WINS :(', 'TIE GAME...']
-username = ""
 
 # deal cards by selecting randomly from deck, and make function for one card at a time
 def deal_cards(current_hand, current_deck):
@@ -162,21 +168,21 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
 def settle(outcome):
     chip = 2000
 
-    with open("user.json", "r", encoding='utf-8') as f:
+    with open("static/json/user.json", "r", encoding='utf-8') as f:
         data = json.load(f)
     if outcome == 2:
         data[username]["chips"] += chip
     elif outcome == 1 and outcome == 3:
         data[username]["chips"] -= chip
-    with open("user.json", 'w', encoding='utf-8') as f:
+    with open("static/json/user.json", 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def is_first_time(username):
-    with open("user.json", "r", encoding='utf-8') as f:
+    with open("static/json/user.json", "r", encoding='utf-8') as f:
         data = json.load(f)
     if data[username]["gameT"]["blackjack"] == 0:
         data[username]["gameT"]["blackjack"] += 1
-        with open("user.json", 'w', encoding='utf-8') as f:
+        with open("static/json/user.json", 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         return True
     else:

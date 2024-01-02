@@ -1,7 +1,8 @@
 //中獎設定
-var probabilityArr = [0.5,1.5,1.5,8,8,8,10,10,10];
-function setProbability(){
+const probabilityArr = [0.5,1.5,1.5,8,8,8,10,10,10];
+function setProbability(first){
   var randomNum = Math.random();
+  if(first == 0) return Math.floor(Math.random() * 9);
   for(var i=0;i<9;i++){
     if(probabilityArr[i] > randomNum * 100){
       if(i == 0)
@@ -41,7 +42,7 @@ var count = -1,closeProbablity = true;
 const roll = (reel, offset = 0) => {
   count++;
   if(count % 3 == 0){ 
-    winNumber = setProbability();
+    winNumber = setProbability(parseInt(document.getElementById("play-times-reel").innerHTML));
     if(winNumber != -1){
       closeProbablity = true;
       console.log("中獎",winNumber);

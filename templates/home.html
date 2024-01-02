@@ -17,8 +17,9 @@
                 <i class="fi fi-sr-bird icon"></i>
                 <div class="details">
                     <ul>
-                        <li>{{ user.id }}</li>
-                        <li id="myCoins">你的代幣：<span class="number">{{ user.info.coin }}</span></li>
+                        <li id="myName">{{ user.id }}</li>
+                        <li id="play-times-reel" style="display: none;">{{ user.info.gameT.reel }}</li>
+                        <li id="play-times-blackjack" style="display: none;">{{ user.info.gameT.blackjack }}</li>
                         <li id="myChips">你的籌碼：<span class="number">{{ user.info.chips }}</span></li>
                     </ul>
                 </div>
@@ -26,10 +27,9 @@
         </div>
         <div class="left-dialog">
             <ul class="button-groups">
-                <form action="/depositMoreCoins">
-                    <li><button>儲值代幣</button></li>
+                <form action="/depositMoreChips">
+                    <li><button>換取籌碼</button></li>
                 </form>
-                <li><button id="changeMoreChips">換取籌碼</button></li>
             </ul>
         </div>
         <div class="left-dialog">
@@ -79,7 +79,6 @@
         {% endblock %}
     </div>
 </div>
-{% include 'money/chips.html' %}
 {% endblock %}
 
 {% block js %}

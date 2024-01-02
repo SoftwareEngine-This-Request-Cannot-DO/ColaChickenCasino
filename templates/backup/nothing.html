@@ -1,0 +1,24 @@
+<div class="chipsPopup" data-role="popup">
+    <h1>兌換籌碼</h1>
+    <div class="chips-container">
+        <i class="fi fi-br-cross-circle cancel-icon"></i>
+        <div class="chips-details">
+            <label for="">兌換的籌碼：</label>
+            <input type="text" name="chips-change" id="chips-change">
+        </div>
+        <div id="exchange-info"></div>
+    </div>
+    <div class="bottom">
+        <button class="button-64" role="button" id="changeButton"><span class="text">兌換籌碼</span></button>
+    </div>
+</div>
+
+<script>
+document.querySelector(".cancel-icon").addEventListener("click", () => {
+    document.querySelector("div[data-role='popup']").classList.toggle('fadein');
+    document.querySelector(".layout").classList.toggle('blur-filter');
+});
+
+document.getElementById('changeButton').addEventListener('click', () => handleData())
+
+</script>

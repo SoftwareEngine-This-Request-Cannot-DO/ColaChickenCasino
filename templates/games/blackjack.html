@@ -1,1 +1,19 @@
 {% extends 'home.html' %}
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="../static/css/blackjack.css">
+{% endblock %}
+
+{% block main %}
+<div class="blackjack-bg">
+    <h1 id="blackjack-title">Black Jack 21</h1>
+    <form class="blackjack-container" action="/runblackjack", method="post">
+        <h2>你的籌碼：{{ user.info.chips }}</h2>
+        <div class="input-container">
+            <label>下注籌碼</label>
+            <input type="text" name="chips-input" id="chips-input" placeholder="下注籌碼">
+        </div>
+        <button type="submit" class="button-64" role="button"><span class="text">開始遊玩</span></button> 
+    </form>
+</div>
+{% endblock %}

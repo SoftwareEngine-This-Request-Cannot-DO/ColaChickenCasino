@@ -19,8 +19,12 @@ document.getElementById('message-input').addEventListener('keypress', function(e
         
         // 觸發發送消息
         const message = this.value;
+        const user = document.getElementById('myName').innerHTML;
         if (message) {
-            socket.emit('send_message', { message: message });
+            socket.emit('send_message', {
+                message: message,
+                user: user
+            });
             this.value = ''; // 清空輸入框
         }
     }
