@@ -30,26 +30,24 @@ socket.on('receive_message', function(data) {
     var chatContainer = document.getElementById('chat-container');
     var newMessageDiv = document.createElement('div');
 
-    // 格式化消息內容
-    newMessageDiv.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+    // 如果是系統消息，使用不同的樣式
+    if (data.username === '系統') {
+        newMessageDiv.innerHTML = `<em>${data.message}</em>`;
+    } else {
+        // 普通消息
+        newMessageDiv.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+    }
     
     chatContainer.appendChild(newMessageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight; // 滾動到最新消息
 });
 
 socket.on('status_updated', function(data) {
-    // 假設 `data` 包含 'username' 和 'status'
     const userElements = document.querySelectorAll('.user .username');
     userElements.forEach(elem => {
-        if (elem.textContent === data.username) {
-            const statusIndicator = elem.previousElementSibling; // 狀態指示器
-            if (data.status === 'online') {
-                statusIndicator.classList.remove('offline');
-                statusIndicator.classList.add('online');
-            } else {
-                statusIndicator.classList.remove('online');
-                statusIndicator.classList.add('offline');
-            }
+        if (elem.textContent === data.user) {
+            const statusIndicator = elem.previousElementSibling;
+            statusIndicator.className = 'status-indicator ' + (data.status === 'online' ? 'online' : 'offline');
         }
     });
 });

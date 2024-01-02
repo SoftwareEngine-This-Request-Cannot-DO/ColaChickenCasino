@@ -107,12 +107,16 @@ def handle_message(data):
 
 @socketio.on('change_status')
 def handle_status_change(data):
-
     status = data['status']
     print(f"Changing status for {current_user.username} to {status}")  
     user_statuses[current_user.username] = status  # 更新狀態
 
+    # 廣播用戶狀態更改
     socketio.emit('status_updated', {'user': current_user.username, 'status': status})
+
+    # 廣播用戶上線或下線的消息
+    status_message = f"{current_user.username} {'上線' if status == 'online' else '下線'}"
+    socketio.emit('receive_message', {'message': status_message, 'username': '系統'})
 
 #/chat
 
