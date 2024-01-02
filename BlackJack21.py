@@ -175,6 +175,9 @@ def is_first_time(username):
     with open("user.json", "r", encoding='utf-8') as f:
         data = json.load(f)
     if data[username]["gameT"]["blackjack"] == 0:
+        data[username]["gameT"]["blackjack"] += 1
+        with open("user.json", 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
         return True
     else:
         return False
