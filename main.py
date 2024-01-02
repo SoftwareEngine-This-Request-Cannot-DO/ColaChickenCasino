@@ -20,8 +20,11 @@ login_manager.init_app(app)
 login_manager.session_protection = "strong"
 login_manager.login_view = 'login'
 login_manager.login_message = '這裡是充滿希望的地方，請表明你的身分'
+
 class User(UserMixin):
     pass
+
+user_statuses = {}  # 用於跟踪用戶狀態
 
 @login_manager.user_loader
 def user_loader(userid):
@@ -81,6 +84,21 @@ def handle_message(data):
     username = data['user']  # 獲取當前用戶的用戶名
     message_data = {'message': data['message'], 'username': username}
     socketio.emit('receive_message', message_data)  # 廣播消息包含用戶名
+
+@socketio.on('change_status')
+def handle_status_change(data):
+    status = data['status']
+    print(f"Changing status for {current_user.username} to {status}")  
+    user_statuses[current_user.username] = status  # 更新狀態
+
+    # 廣播用戶狀態更改
+    socketio.emit('status_updated', {'user': current_user.username, 'status': status})
+
+    # 廣播用戶上線或下線的消息
+    status_message = f"{current_user.username} {'上線' if status == 'online' else '下線'}"
+    socketio.emit('receive_message', {'message': status_message, 'username': '系統'})
+
+#/chat
 
 if __name__ == "__main__":
     users = handler.get_users_data()
