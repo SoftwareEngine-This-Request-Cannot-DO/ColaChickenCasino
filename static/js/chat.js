@@ -55,17 +55,29 @@ socket.on('status_updated', function(data) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    let canChangeStatus = true; // 用來控制狀態切換的標誌
+
     document.querySelectorAll('.status-indicator').forEach(indicator => {
         indicator.addEventListener('click', function() {
+            if (!canChangeStatus) {
+                console.log("You can only change status every 3 seconds.");
+                return; // 如果還沒到3秒，則不執行任何操作
+            }
+
+            canChangeStatus = false; // 設置狀態切換標誌為 false
+            setTimeout(() => {
+                canChangeStatus = true; // 3秒後將標誌重置為 true
+            }, 3000); // 3秒的計時器
+
             const isOnline = this.classList.contains('online');
             const newStatus = isOnline ? 'offline' : 'online';
             this.classList.toggle('online', newStatus === 'online');
             this.classList.toggle('offline', newStatus === 'offline');
+
             socket.emit('change_status', { status: newStatus });
         });
     });
 });
-
 function setupStatusIndicatorListeners() {
     document.querySelectorAll('.status-indicator').forEach(indicator => {
         indicator.addEventListener('click', function() {
