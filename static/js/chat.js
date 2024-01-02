@@ -36,3 +36,47 @@ socket.on('receive_message', function(data) {
     chatContainer.appendChild(newMessageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight; // 滾動到最新消息
 });
+
+socket.on('status_updated', function(data) {
+    // 假設 `data` 包含 'username' 和 'status'
+    const userElements = document.querySelectorAll('.user .username');
+    userElements.forEach(elem => {
+        if (elem.textContent === data.username) {
+            const statusIndicator = elem.previousElementSibling; // 狀態指示器
+            if (data.status === 'online') {
+                statusIndicator.classList.remove('offline');
+                statusIndicator.classList.add('online');
+            } else {
+                statusIndicator.classList.remove('online');
+                statusIndicator.classList.add('offline');
+            }
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.status-indicator').forEach(indicator => {
+        indicator.addEventListener('click', function() {
+            const isOnline = this.classList.contains('online');
+            const newStatus = isOnline ? 'offline' : 'online';
+            this.classList.toggle('online', newStatus === 'online');
+            this.classList.toggle('offline', newStatus === 'offline');
+            socket.emit('change_status', { status: newStatus });
+        });
+    });
+});
+
+function setupStatusIndicatorListeners() {
+    document.querySelectorAll('.status-indicator').forEach(indicator => {
+        indicator.addEventListener('click', function() {
+            const isOnline = this.classList.contains('online');
+            const newStatus = isOnline ? 'offline' : 'online';
+            socket.emit('change_status', { status: newStatus });
+        });
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    setupStatusIndicatorListeners();
+});

@@ -23,6 +23,8 @@ class User(UserMixin):
 with open('static/json/user.json', 'r', encoding='utf-8') as f:
     users = json.load(f)
 
+user_statuses = {}  # 用於跟踪用戶狀態
+
 @login_manager.user_loader
 def user_loader(userid):
     if userid not in users:
@@ -90,6 +92,7 @@ def slotrun():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+#chat
 @app.route('/chat')
 @login_required
 def chat():
@@ -101,6 +104,17 @@ def handle_message(data):
     username = current_user.id  # 獲取當前用戶的用戶名
     message_data = {'message': data['message'], 'username': username}
     socketio.emit('receive_message', message_data)  # 廣播消息包含用戶名
+
+@socketio.on('change_status')
+def handle_status_change(data):
+
+    status = data['status']
+    print(f"Changing status for {current_user.username} to {status}")  
+    user_statuses[current_user.username] = status  # 更新狀態
+
+    socketio.emit('status_updated', {'user': current_user.username, 'status': status})
+
+#/chat
 
 @app.route('/depositMoreCoins')
 @login_required

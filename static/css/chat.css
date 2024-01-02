@@ -56,6 +56,24 @@ Chat Title
   text-align: left;
   padding: 10px 10px 10px 50px;
 }
+.status-indicator {
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.status-indicator.online {
+  margin-left: 35px;
+  background-color: rgb(64, 255, 0);
+}
+
+.status-indicator.offline {
+  margin-left: 35px;
+  background-color: rgb(91, 90, 90);
+}
 .chat-title h1, .chat-title h2 {
   font-weight: normal;
   font-size: 1rem;
