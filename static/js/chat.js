@@ -101,3 +101,81 @@ function setupStatusIndicatorListeners() {
 // document.addEventListener('DOMContentLoaded', function() {
 //     setupStatusIndicatorListeners();
 // });
+
+const friends_list = document.getElementById("friends_list");
+function getFriendsData() {
+    fetch('/getFriends')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data from Flask:', data);
+            if(data.friends.length > 0){
+                for(let f of data.friends){
+                    const friend = document.createElement('li');
+                    friend.innerHTML = f;
+                    friends_list.appendChild(friend);
+                }
+                return;
+            }
+            const friend = document.createElement('li');
+            friend.innerHTML = "你目前沒有朋友";
+            friends_list.appendChild(friend);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching data from Flask');
+        });
+}
+
+
+function getAllUserData() {
+    fetch('/getAllUser')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data from Flask:', data);
+            if(data.users.length > 0){
+                friends_list.innerHTML = "";
+                for(let f of data.users){
+                    const friend = document.createElement('li');
+                    friend.setAttribute('class', 'user_item')
+                    friend.innerHTML = f;
+                    friend.addEventListener('click', () => {
+                        fetch('/addFriends', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({'username': friend.innerHTML}),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Response from Flask:', data);
+                            friends_list.innerHTML = ""
+                            if(data.friends.length > 0){
+                                for(let f of data.friends){
+                                    const friend = document.createElement('li');
+                                    friend.innerHTML = f;
+                                    friends_list.appendChild(friend);
+                                }
+                                return;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error sending data to Flask');
+                        });
+                    })
+                    friends_list.appendChild(friend);
+                }
+                return;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching data from Flask');
+        });
+}
+
+document.getElementById('addFriends').addEventListener('click', () => {
+    getAllUserData();
+});
+getFriendsData();

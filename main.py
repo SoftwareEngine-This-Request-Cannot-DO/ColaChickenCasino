@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from views.money import money_bp
 from views.game import game_bp
-import json, os, handler
+import os, handler
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(16).hex())
@@ -72,10 +72,33 @@ def logout():
 def home():
     return render_template('home.html', user=current_user)
 
-@app.route('/chat')
+#/chat
+@app.route('/getFriends')
 @login_required
-def chat():
-    return render_template('chat/chat.html', user=current_user)
+def getFriend():
+    data = {'friends': current_user.info['friends']}
+    return jsonify(data)
+
+@app.route('/getAllUser')
+@login_required
+def getAllUser():
+    data = {'users': []}
+    for key, user in users.items():
+        if key != current_user.account and user['username'] not in current_user.info['friends']:
+            data['users'].append(user['username'])
+    return jsonify(data)
+
+@app.route('/addFriends', methods=['POST'])
+@login_required
+def addFriends():
+    data = request.get_json()
+    print(data)
+    usersname = [user['username'] for key, user in users.items()]
+    if data['username'] in usersname:
+        users[current_user.account]['friends'].append(data['username'])
+        handler.write_json_file('/user.json', users)
+    data = {'friends': current_user.info['friends']}
+    return jsonify(data)
 
 @socketio.on('send_message')
 def handle_message(data):
@@ -97,8 +120,6 @@ def handle_status_change(data):
     # 廣播用戶上線或下線的消息
     status_message = f"{data['user']} {'上線' if status == 'online' else '下線'}"
     socketio.emit('receive_message', {'message': status_message, 'username': '系統'})
-
-#/chat
 
 if __name__ == "__main__":
     users = handler.get_users_data()

@@ -58,7 +58,7 @@
                     <li>
                         <span>
                             <i class="fi fi-ss-comment"></i>
-                            <a href="/chat">聊天室</a>
+                            <button id="chatting-button">聊天室</button>
                         </span>
                     </li>
                 </ul>
@@ -72,7 +72,7 @@
             </li>
         </ul>
     </div>
-    {% include 'chat/chatroom.html' %}
+    {% include 'chatroom.html' %}
     <div class="main-wrapper">
         {% block main %}
         <main>This is Home Page</main>
@@ -85,6 +85,10 @@
 <script>
     const chattingRoom = document.getElementById("chatting-room");
     document.getElementById("chatting-screen").addEventListener('click', () => {
+        chattingRoom.classList.toggle('slide-out');
+        chattingRoom.classList.toggle('slide-in');
+    });
+    document.getElementById("chatting-button").addEventListener('click', () => {
         chattingRoom.classList.toggle('slide-out');
         chattingRoom.classList.toggle('slide-in');
     });

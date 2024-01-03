@@ -6,7 +6,10 @@
     "gameT": {
       "blackjack": 1,
       "reel": 13
-    }
+    },
+    "friends": [
+      "Player001"
+    ]
   },
   "Player001": {
     "username": "Player001",
@@ -15,7 +18,8 @@
     "gameT": {
       "blackjack": 0,
       "reel": 0
-    }
+    },
+    "friends": []
   },
   "Player002": {
     "username": "I NEED SOME $$",
@@ -24,6 +28,7 @@
     "gameT": {
       "blackjack": 0,
       "reel": 0
-    }
+    },
+    "friends": []
   }
 }
