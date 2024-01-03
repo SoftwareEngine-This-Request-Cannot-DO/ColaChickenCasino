@@ -55,7 +55,7 @@ const handleData = () => {
             console.log('Response data:', data);
             document.getElementById('myChips').querySelector(".number").innerText = data.chips;
             document.getElementById("credits-display").textContent = data.chips;
-            document.getElementById("play-times-reel").innerHTML = data.play_times;
+            document.getElementById("play-times-reel").innerHTML = data.gameT;
         })
         .catch(error => {
             console.error('Fetch error:', error);

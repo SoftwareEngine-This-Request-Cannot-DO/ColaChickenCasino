@@ -1,12 +1,16 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
-import subprocess, handler, json
+import subprocess, handler
 
 game_bp = Blueprint('game', __name__)
 
 @game_bp.route('/game/<gameType>')
 @login_required
 def game(gameType):
+    if gameType == 'reel' and current_user.info['gameT']['reel'] == 0:
+        current_user.info['chips'] += 500
+        users = handler.get_users_data()
+        users[current_user.account]['chips'] += 500
     return render_template(f'/games/{gameType}.html', user=current_user)
 
 @game_bp.route('/slotrun', methods=['POST'])
@@ -20,10 +24,11 @@ def slotrun():
         users = handler.get_users_data()
         users[current_user.account]['chips'] = chips_result
         users[current_user.account]['gameT']['reel'] += 1
-        with open('static/json/user.json', 'w', encoding='utf-8') as f:
-            json.dump(users, f, indent=2, ensure_ascii=False)
+        current_user.info['chips'] = chips_result
+        current_user.info['gameT']['reel'] += 1
+        handler.write_json_file('user.json', users)
         return jsonify({
-                'chips': chips_result,
+                'chips': users[current_user.account]['chips'],
                 'gameT': users[current_user.account]['gameT']['reel']
             })
 

@@ -167,7 +167,6 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
 
 def settle(outcome):
     chip = 2000
-
     with open("static/json/user.json", "r", encoding='utf-8') as f:
         data = json.load(f)
     if outcome == 2:

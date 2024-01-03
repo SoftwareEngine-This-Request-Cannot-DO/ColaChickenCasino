@@ -2,17 +2,15 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask import Flask, flash, redirect, render_template, request, url_for, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from views.money import money_bp
-from views.game import game_bp
-import os, handler
+import os, handler, CreditCard, subprocess
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(16).hex())
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-app.register_blueprint(money_bp)
-app.register_blueprint(game_bp)
+# app.register_blueprint(app)
+# app.register_blueprint(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -120,6 +118,98 @@ def handle_status_change(data):
     # 廣播用戶上線或下線的消息
     status_message = f"{data['user']} {'上線' if status == 'online' else '下線'}"
     socketio.emit('receive_message', {'message': status_message, 'username': '系統'})
+
+@app.route('/depositMoreChips')
+@login_required
+def depositMoreCoins():
+    users = handler.get_users_data()
+    current_user.info['chips'] = users[current_user.account]['chips']
+    return render_template('chips.html', user=current_user, type="")
+
+@app.route('/depositWith/<type>', methods=['POST'])
+@login_required
+def creditCards(type):
+    return render_template('chips.html', user=current_user, type=type)
+
+'''
+原本換籌碼方式：信用卡餘額＞代幣＞籌碼
+更改後方式：信用卡餘額＞籌碼
+
+備注：原本前端傳後端的方式用 ajax，現在改用 form
+'''
+@app.route('/addChips',  methods=['POST'])
+@login_required
+def changeMoreChips():
+    try:
+        data = request.form
+        if len(data.get('deposit-money')) > 0:
+            chips = int(data.get('deposit-money'))
+        else:
+            return f"<script>alert('籌碼不能為空');history.back();</script>"
+        res = cardhandler(data, chips)
+        if res[0]:
+            current_user.info['chips'] += chips
+            return render_template('chips.html', user=current_user, type='creditCard')
+        return f"<script>alert('{res[1]}');history.back();</script>"
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+def cardhandler(data, amount):
+    card_data = {
+        'cardNumber':[str(data.get('credit-number' + str(i))) for i in range(1, 5)],
+        'cardDated': str(data.get('credit-dated')),
+        'cardSecret': str(data.get('credit-secret'))
+    }
+    
+    id = ''.join(card_data.get('cardNumber'))
+    res = CreditCard.top_up_to_game(current_user.account, id, card_data.get("cardSecret"), card_data.get("cardDated"), amount)
+    return [1, res] if "Success" in res else [0, res]
+
+@app.route('/game/<gameType>')
+@login_required
+def game(gameType):
+    users = handler.get_users_data()
+    current_user.info['chips'] = users[current_user.account]['chips']
+    if gameType == 'reel' and current_user.info['gameT']['reel'] == 0:
+        current_user.info['chips'] += 500
+        users = handler.get_users_data()
+        users[current_user.account]['chips'] += 500
+    return render_template(f'/games/{gameType}.html', user=current_user)
+
+@app.route('/slotrun', methods=['POST'])
+@login_required
+def slotrun():
+    try:
+        data = request.get_json()
+        chips_result = int(data['current']) - int(data['pay'])
+        if data['result'] != '--':
+            chips_result += int(data['result'])
+        users = handler.get_users_data()
+        users[current_user.account]['chips'] = chips_result
+        users[current_user.account]['gameT']['reel'] += 1
+        current_user.info['chips'] = chips_result
+        current_user.info['gameT']['reel'] += 1
+        handler.write_json_file('user.json', users)
+        return jsonify({
+                'chips': users[current_user.account]['chips'],
+                'gameT': users[current_user.account]['gameT']['reel']
+            })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+    
+@app.route('/runblackjack', methods=['POST'])
+@login_required
+def runblackjack():
+    data = request.form
+    if len(data.get('chips-input')) > 0:
+        chips = int(data.get('chips-input'))
+    else:
+        return f"<script>alert('籌碼不能為空');history.back();</script>"
+    
+    blackjack_script_path = './BlackJack21.py'
+    subprocess.run(['python', blackjack_script_path, '--username', f'{current_user.account}'])
+
 
 if __name__ == "__main__":
     users = handler.get_users_data()

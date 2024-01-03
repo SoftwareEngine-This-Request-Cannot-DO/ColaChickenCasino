@@ -2,13 +2,12 @@
   "Test": {
     "username": "ColaChicken",
     "password": "test",
-    "chips": 286356,
+    "chips": 80900,
     "gameT": {
       "blackjack": 1,
-      "reel": 13
+      "reel": 1
     },
     "friends": [
-      "Player001"
     ]
   },
   "Player001": {

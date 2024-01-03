@@ -122,3 +122,11 @@ async function rollAll() {
       })
   })
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+  let first_time_chips = false
+  if(parseInt(document.getElementById("play-times-reel").innerHTML) == 0 && !first_time_chips){
+    first_time_chips = true
+    alert("哈囉，歡迎來到吃角子老虎機，給你 500 籌碼玩玩");
+  }
+});
